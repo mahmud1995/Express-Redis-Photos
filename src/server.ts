@@ -119,6 +119,80 @@ app.get(
   }
 );
 
+app.get("/posts/", async (req: Request, res: Response) => {
+  try {
+    console.log("Get All Posts");
+    const postUserId = req.query.userId;
+
+    const cacheKey = postUserId ? `posts:${postUserId}` : "posts";
+    const cachedData = await redisClient.get(cacheKey);
+
+    if (cachedData) {
+      console.log("cachedData HIT");
+      return res.json(JSON.parse(cachedData));
+    } else {
+      console.log("cachedData MISS");
+    }
+    const { data } = await axios.get(
+      `https://jsonplaceholder.typicode.com/posts`
+    );
+    await redisClient.setEx(cacheKey, DEFAULT_EXPIRATION, JSON.stringify(data));
+    return res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch posts" });
+  }
+});
+
+app.get("/posts/userid/:userid", async (req: Request, res: Response) => {
+  try {
+    const { userid } = req.params;
+
+    // check cache
+    const cacheKey = `posts/userid/${userid}`;
+    const cachedData = await redisClient.get(cacheKey);
+
+    if (cachedData) {
+      console.log("cachedData HIT!!");
+      return res.json(JSON.parse(cachedData));
+    } else {
+      console.log("cachedData MISS!!");
+    }
+
+    const { data } = await axios.get(
+      `https://jsonplaceholder.typicode.com/posts/${userid}`
+    );
+    await redisClient.setEx(cacheKey, DEFAULT_EXPIRATION, JSON.stringify(data));
+    return res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch posts by userId" });
+  }
+});
+
+app.get("/posts/id/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const cacheKey = `posts/id/${id}`;
+    const cachedKey = await redisClient.get(cacheKey);
+
+    if (cachedKey) {
+      console.log("cachedData HIT!!!");
+      return res.json(JSON.parse(cachedKey));
+    } else {
+      console.log("cachedData MISS!!!");
+    }
+
+    const { data } = await axios.get(
+      `https://jsonplaceholder.typicode.com/posts/${id}`
+    );
+
+    await redisClient.setEx(cacheKey, DEFAULT_EXPIRATION, JSON.stringify(data));
+    res.json(data);
+  } catch {
+    res.status(500).json({ error: "Failed to fetch posts by id" });
+  }
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
