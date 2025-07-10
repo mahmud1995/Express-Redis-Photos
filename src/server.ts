@@ -119,6 +119,7 @@ app.get(
   }
 );
 
+// 4. Get all posts
 app.get("/posts/", async (req: Request, res: Response) => {
   try {
     console.log("Get All Posts");
@@ -143,6 +144,7 @@ app.get("/posts/", async (req: Request, res: Response) => {
   }
 });
 
+// 5. Get posts by user id
 app.get("/posts/userid/:userid", async (req: Request, res: Response) => {
   try {
     const { userid } = req.params;
@@ -168,6 +170,7 @@ app.get("/posts/userid/:userid", async (req: Request, res: Response) => {
   }
 });
 
+// 6. Get posts by id
 app.get("/posts/id/:id", async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
