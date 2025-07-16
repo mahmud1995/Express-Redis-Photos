@@ -1,4 +1,15 @@
-import express, { json, Request, Response } from "express";
+/**
+ * Redis uzi nima?
+ * Install qilish
+ * Folder hosil qilish
+ * npm init -y
+ * import express, axios
+ * const app
+ * cors integrate to app
+ * create redis client
+ * **/
+
+import express, { Request, Response } from "express";
 import cors from "cors";
 import axios from "axios";
 import { createClient } from "redis";
@@ -15,7 +26,6 @@ redisClient.connect().catch(console.error);
 app.get("/photos", async (req: Request, res: Response) => {
   try {
     const albumId = req.query.albumId;
-
     // check cache first ==>
     const cacheKey = albumId ? `photos:${albumId}` : "photos";
     const cachedData = await redisClient.get(cacheKey);
