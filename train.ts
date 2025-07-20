@@ -1,4 +1,4 @@
-console.log("train");
+console.log("train new Promise and Promise.all");
 // TypeScript version with explicit types and debugging
 async function readAllFuncs(): Promise<string[]> {
   console.log("🚀 Starting all tasks...");
@@ -8,6 +8,7 @@ async function readAllFuncs(): Promise<string[]> {
       walkDog(),
       cleanKitchen(),
       startRobot(),
+      throwTrash(),
     ]);
     console.log("✅ All mission is completed!");
     console.log("📋 Results:", results);
@@ -17,7 +18,7 @@ async function readAllFuncs(): Promise<string[]> {
     throw error;
   }
 }
-
+// Function - 1
 function walkDog(): Promise<string> {
   console.log("🐕 Starting to walk the dog...");
   return new Promise((resolve) => {
@@ -27,7 +28,7 @@ function walkDog(): Promise<string> {
     }, 2000);
   });
 }
-
+// Function - 2
 function cleanKitchen(): Promise<string> {
   console.log("🧽 Starting to clean kitchen...");
   return new Promise((resolve) => {
@@ -37,7 +38,7 @@ function cleanKitchen(): Promise<string> {
     }, 3000);
   });
 }
-
+// Function - 3
 function startRobot(): Promise<string> {
   console.log("🤖 Starting robot...");
   return new Promise((resolve) => {
@@ -47,6 +48,21 @@ function startRobot(): Promise<string> {
     }, 500);
   });
 }
+// Function - 4
+function throwTrash(): Promise<string> {
+  return new Promise((resolve) => {
+    const youCan = true;
+    setTimeout(() => {
+      if (youCan) {
+        console.log("You can throw the trash");
+        resolve("Succesfully threw out the trash");
+      } else {
+        console.log("It is not right time to throw out the Trash");
+      }
+    }, 500);
+  });
+}
+
 // readAllFuncs().then(() => console.log("All household chores are done!"));
 
 // Method 1: Using .then()
@@ -71,3 +87,5 @@ readAllFuncs()
 //     console.error("💥 Something went wrong:", error);
 //   }
 // }
+
+console.log("train new Promise and Promise.allSettled");
