@@ -1,9 +1,9 @@
 // console.log("train new Promise and Promise.all");
+
+// #region 🧩 new Promise
 // TypeScript version with explicit types and debugging
 // async function readAllFuncs(): Promise<string[]> {
 //   console.log("🚀 Starting all tasks...");
-
-import { get } from "axios";
 
 //   try {
 //     const results = await Promise.all([
@@ -87,7 +87,9 @@ import { get } from "axios";
 //     console.error("💥 Something went wrong:", error);
 //   }
 // }
+// #endregion 🧩 new Promise
 
+// #region Promise.allSettled
 // console.log("TRAIN new Promise and Promise.allSettled\n");
 
 // async function checkAllFuncs(): Promise<any> {
@@ -240,88 +242,214 @@ import { get } from "axios";
 // const resultOfGetFlaggedCells = getFlaggedCells(gameBoard);
 // console.log("Result Of Get Flagged Cells:", resultOfGetFlaggedCells);
 
-class Cell {
-  flagged: boolean;
+// class Cell {
+//   flagged: boolean;
 
-  constructor(flagged: boolean) {
-    this.flagged = flagged;
-  }
+//   constructor(flagged: boolean) {
+//     this.flagged = flagged;
+//   }
 
-  isFlagged(): boolean {
-    return this.flagged;
-  }
-}
+//   isFlagged(): boolean {
+//     return this.flagged;
+//   }
+// }
 
-function getFlaggedCells(gameBoard: Cell[]): Cell[] {
-  const flaggedCells: Cell[] = [];
-  for (const cell of gameBoard) {
-    if (cell.isFlagged()) {
-      flaggedCells.push(cell);
-    }
-  }
-  return flaggedCells;
-}
+// function getFlaggedCells(gameBoard: Cell[]): Cell[] {
+//   const flaggedCells: Cell[] = [];
+//   for (const cell of gameBoard) {
+//     if (cell.isFlagged()) {
+//       flaggedCells.push(cell);
+//     }
+//   }
+//   return flaggedCells;
+// }
 
-const gameBoard = [
-  [4, 3],
-  [3, 4],
-  [5, 4],
-  [4, 0],
-];
-// const result = getFlaggedCells(gameBoard);
-function greet(who: string) {
-  console.log("hellpo", who);
-}
-greet("ali");
+// const gameBoard = [
+//   [4, 3],
+//   [3, 4],
+//   [5, 4],
+//   [4, 0],
+// ];
+// // const result = getFlaggedCells(gameBoard);
+// function greet(who: string) {
+//   console.log("hellpo", who);
+// }
+// greet("ali");
 
-interface State {
+// interface State {
+//   name: string;
+//   capital: string;
+// }
+
+// const states: State[] = [
+//   { name: "Alabama", capital: "Montgomery" },
+//   { name: "Alaska", capital: "Juneau" },
+//   { name: "Arizona", capital: "Phoenix" },
+//   // ...
+// ];
+// for (const state of states) {
+//   console.log(state.capital);
+// }
+
+// const x: string = 2 + "3";
+// console.log(x);
+
+// function add(a: any, b: any): any {
+//   return a + b;
+// }
+// const checkImplicit = add(10, null);
+// console.log("checkImplicit", checkImplicit);
+
+// const strctNulChek: number | null = null;
+
+// interface Square {
+//   kind: "square";
+//   width: number;
+// }
+// interface Rectangle {
+//   kind: "rectangle";
+//   height: number;
+//   width: number;
+// }
+
+// type Shape = Square | Rectangle;
+// function calculateArea(shape: Shape) {
+//   if (shape.kind === "rectangle") {
+//     return shape.height * shape.width;
+//   } else {
+//     return shape.width / shape.width;
+//   }
+// }
+// const exam: Shape = {
+//   kind: "square",
+//   //   height: 15,
+//   width: 10,
+// };
+// const resultOfCalculateArea = calculateArea(exam);
+// console.log("resultOfCalculateArea: ", resultOfCalculateArea);
+
+/**
+ * Common Messy Code Issues
+ *
+ */
+
+// #region MESSY CODE-1
+/** MESSY CODE **/
+
+// console.log("MESSY CODE START!");
+// export function fetchUserDataMessy(userId: number) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       console.log("USERS Fetch");
+//       fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+//         .then((response) => response.json())
+//         .then((user) => {
+//           console.log("POSTS Fetch");
+//           fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`)
+//             .then((response) => response.json())
+//             .then((posts) => {
+//               if (!posts.length) throw new Error("No posts found");
+//               console.log("COMMENTS Fetch");
+//               fetch(
+//                 `https://jsonplaceholder.typicode.com/comments?postId=${posts[0].id}`
+//               )
+//                 .then((response) => response.json())
+//                 .then((comments) => {
+//                   resolve({ user, posts, comments });
+//                 })
+//                 .catch((err) => console.log("Comments fetch error:", err));
+//             })
+//             .catch((err) => console.log("Posts fetch error:", err));
+//         })
+//         .catch((err) => console.log("User fetch error:", err));
+//     }, 1000);
+//   });
+// }
+// fetchUserDataMessy(1).then((value) => console.log(value));
+// #endregion MESSY CODE
+
+// #region CLEAN CODE-1
+/** CLEAN CODE **/
+console.log("CLEAN CODE START!");
+
+interface User {
+  id: string;
   name: string;
-  capital: string;
+  email: string;
+  address: {};
+}
+interface Post {
+  id: string;
+  userId: string;
+  title: string;
+}
+interface Comment {
+  id: string;
+  postId: string;
+  text: string;
+}
+interface UserData {
+  user: User;
+  posts: Post[];
+  comments: Comment[];
 }
 
-const states: State[] = [
-  { name: "Alabama", capital: "Montgomery" },
-  { name: "Alaska", capital: "Juneau" },
-  { name: "Arizona", capital: "Phoenix" },
-  // ...
-];
-for (const state of states) {
-  console.log(state.capital);
-}
+// export async function fetchUserDataClean(userId: number): Promise<UserData> {
+//   try {
+//     console.log("Clean Code started to fetch Data!");
+//     const [userResponse, postsResponse] = await Promise.all([
+//       fetch(`https://jsonplaceholder.typicode.com/users/${userId}`),
+//       fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`),
+//     ]);
 
-const x: string = 2 + "3";
-console.log(x);
+//     const [user, posts] = await Promise.all([
+//       userResponse.json(),
+//       postsResponse.json(),
+//     ]);
+//     /**
+//      * const user = await userResponse.json()
+//      * const post = await postResponse.json()
+//      * BUT IT TAKES MORE TIME THEN PROMISE.ALL()
+//      * */
 
-function add(a: any, b: any): any {
-  return a + b;
-}
-const checkImplicit = add(10, null);
-console.log("checkImplicit", checkImplicit);
+//     const commentsResponse = await fetch(
+//       `https://jsonplaceholder.typicode.com/comments?postId=${posts[0].id}`
+//       //https://jsonplaceholder.typicode.com/comments?postId=${posts[0].id}
+//     );
+//     const comments = await commentsResponse.json();
 
-const strctNulChek: number | null = null;
+//     return { user, posts, comments };
+//   } catch (error) {
+//     console.log("Failed to fetch user data:", error);
+//     throw new Error(`Unable to fetch data for user ${userId}`);
+//   }
+// }
 
-interface Square {
-  kind: "square";
-  width: number;
-}
-interface Rectangle {
-  kind: "rectangle";
-  height: number;
-  width: number;
-}
+export async function fetchUserDataClean(userId: number): Promise<UserData> {
+  try {
+    console.log("Clean Code started to fetch Data!");
 
-type Shape = Square | Rectangle;
-function calculateArea(shape: Shape) {
-  if (shape.kind === "rectangle") {
-    return shape.height * shape.width;
-  } else {
-    return shape.width / shape.width;
+    const [userResponse, postResponse] = await Promise.all([
+      fetch(`https://jsonplaceholder.typicode.com/users/${userId}`),
+      fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`),
+    ]);
+
+    const [user, posts] = await Promise.all([
+      userResponse.json(),
+      postResponse.json(),
+    ]);
+    /** SEPARATING commenResponse for ==>
+     * More readable and sequential — it's clear that comments depend on posts[0].id
+     * Avoids unnecessary request if posts is empty or missing
+     */
+    const commentResponse = await fetch(
+      `https://jsonplaceholder.typicode.com/comments?postId=${posts[0].id}`
+    );
+    const comments = await commentResponse.json();
+
+    return { user, posts, comments };
+  } catch (error) {
+    console.log("Failed to fetch data:", error);
+    throw new Error(`Unable to fetch data for user ${userId}`);
   }
 }
-const exam: Shape = {
-  kind: "square",
-  //   height: 15,
-  width: 10,
-};
-const resultOfCalculateArea = calculateArea(exam);
-console.log("resultOfCalculateArea: ", resultOfCalculateArea);

@@ -13,7 +13,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import axios from "axios";
 import { createClient } from "redis";
-
+import { fetchUserDataClean } from "../train";
 const DEFAULT_EXPIRATION = 3600;
 const app = express();
 app.use(cors());
@@ -22,6 +22,20 @@ const redisClient = createClient();
 // connect with Redis
 redisClient.connect().catch(console.error);
 
+// TRAIN AREA
+app.get("/train", async (req: Request, res: Response) => {
+  try {
+    console.log("Request came from /train endpoint");
+    const data = await fetchUserDataClean(1);
+    res.json(data);
+  } catch (error) {
+    res
+      .status(500)
+      .send({ error: error instanceof Error ? error.message : error });
+  }
+});
+
+// TRAIN AREA
 // 1. Get all photos (or filtered by ?albumId=)
 app.get("/photos", async (req: Request, res: Response) => {
   try {
